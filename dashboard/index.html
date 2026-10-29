@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Crowd Risk · Staff Monitor</title>
+<style>
+:root{color-scheme:dark;--bg:#0c1420;--panel:#142132;--line:#334559;--muted:#b3c3d5;--text:#f0f5fc}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,sans-serif}header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 24px;border-bottom:1px solid var(--line)}h1{font-size:20px;margin:0}h2{font-size:18px;margin:0 0 12px}h3{font-size:20px;margin:0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}button,input,select{font:inherit;color:inherit;background:#21354c;border:1px solid #607993;border-radius:7px;padding:8px 12px;max-width:100%}button{cursor:pointer}input{width:190px}#clock{margin-left:auto;font-size:12px;color:var(--muted)}.banner{padding:10px 24px;background:#302b1e;color:#f5db9d;font-size:13px}main{padding:24px;max-width:1920px;margin:auto;display:grid;gap:24px}#cameras,.camera,.camera-grid,.camera-grid>div{min-width:0}.camera{padding:20px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:20px}.camera h2{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.camera-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px}.picture{position:relative;align-self:start;position:sticky;top:16px;background:#080d14;border-radius:9px;overflow:hidden;min-height:180px}.picture img{display:block;width:100%;height:auto;object-fit:contain}.veil{position:absolute;inset:0;display:grid;place-items:center;background:#0c1420ee;text-align:center;padding:20px;font-size:24px}.zones{display:grid;gap:18px}.zone{background:#192b40;border:1px solid #425971;border-radius:10px;padding:20px}.badge{display:inline-block;border:1px solid currentColor;border-radius:6px;padding:4px 9px;font-size:13px;font-weight:750;white-space:normal}.L1{color:#bed0e5}.L2{color:#f1d387}.L3{color:#ffbb87}.L4{color:#ff9d9d}.no-data{color:#ffb1b1}.muted,small,.legend{color:var(--muted)}.metrics{display:flex;gap:32px;flex-wrap:wrap;margin:16px 0}.metric{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}.countdown{font-size:27px;font-weight:750;line-height:1.3;margin:4px 0 18px}.forecast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.forecast{padding:12px 8px;background:#0e1b2a;border-radius:7px;text-align:center}.forecast strong{display:block;font-size:22px}.forecast small{display:block}.chart{width:100%;height:135px;display:block;margin-top:12px}.legend{font-size:12px;margin-top:12px}.links,.timing{border-top:1px solid var(--line);padding-top:16px;margin-top:20px}.link{padding:6px 0}.feed{list-style:none;padding:0;max-height:440px;overflow:auto}.feed li{display:flex;gap:14px;border-top:1px solid var(--line);padding:16px 0;overflow-wrap:anywhere}.feed time{font-size:12px;color:var(--muted)}aside{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--panel)}.drill{border:2px dashed #f1d387!important;padding:12px!important}.highlight{border-color:#b48a51}.empty{padding:24px}.presentation .metric{font-size:32px}.presentation .debug{display:none}p{margin:8px 0} [hidden]{display:none!important}@media(max-width:1000px){.camera-grid{grid-template-columns:1fr}.picture{position:relative;top:0}main{padding:12px}.camera{padding:12px}}@media(max-width:480px){header{padding:12px}.zone{padding:12px}.forecast strong{font-size:18px}.forecast{padding:10px 4px}.countdown{font-size:23px}#clock{margin-left:0}.feed li{flex-wrap:wrap}}
+
+/* Compact monitoring view: all zone summaries precede optional detail. */
+header{gap:8px;padding:8px 16px;align-items:end}header h1{font-size:17px;align-self:center}header label{display:grid;gap:2px;font-size:12px;color:var(--muted)}header input{width:155px}header button,header select,header input{padding:5px 9px;min-height:34px}#clock{align-self:center}.banner{padding:6px 16px}main{padding:12px 16px;gap:12px}.camera{padding:12px;margin-bottom:12px}.camera h2{font-size:16px;margin-bottom:8px;gap:8px}.camera-grid{grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:14px;align-items:start}.picture{top:10px;min-height:140px;max-height:min(52vh,420px);display:flex;justify-content:center}.picture img{width:100%;height:auto;max-height:min(52vh,420px);object-fit:contain}.zones{gap:10px}.zone{padding:10px 12px;border-radius:8px}.zone h3{font-size:17px;align-items:center}.badge{padding:3px 7px}.zone-meta{font-size:12px;margin:2px 0 6px;color:var(--muted)}.summary-metrics{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:10px;margin:6px 0 8px;align-items:start}.summary-metrics small{display:block;font-size:12px}.metric,.presentation .metric{font-size:23px;line-height:1.25}.countdown{font-size:19px;line-height:1.3;margin:0}.eta-note{font-size:12px;color:var(--muted);margin:2px 0 0}.forecast-grid{gap:6px}.forecast{padding:6px}.forecast strong{font-size:19px;line-height:1.3}.forecast small{font-size:12px}.forecast-level{font-size:12px;color:var(--muted)}details{border-top:1px solid var(--line);margin-top:8px;padding-top:6px}summary{cursor:pointer;font-size:13px;color:#d0e1f4;min-height:24px}details p{margin:6px 0}.legend{margin-top:6px}.chart{height:120px;margin-top:6px}.timing{margin-top:12px;padding-top:10px}.link{padding:2px 0}aside{padding:12px}.feed li{padding:10px 0}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #a8d6ff;outline-offset:3px}@media(max-width:900px){.camera-grid{grid-template-columns:1fr}.picture{position:relative;top:0;max-height:32vh}.picture img{max-height:32vh}header{align-items:center}#clock{margin-left:0}}@media(max-width:480px){main{padding:8px}.camera{padding:8px}.zone{padding:10px}.summary-metrics{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr)}.countdown{font-size:17px}.forecast strong{font-size:18px}header h1{width:100%}header label{flex:1;min-width:0}header input{width:100%}.badge{font-size:12px}}
+
+.alert-filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.alert-filters label{display:grid;gap:3px;font-size:12px;color:var(--muted)}.alert-filters select{padding:5px 8px;min-width:125px}.feed{max-height:520px;overflow:auto;margin:8px 0}.feed li.alert-card{display:grid;grid-template-columns:145px minmax(0,1fr) minmax(150px,210px);gap:12px;padding:10px 4px;align-items:start}.alert-card .badge{align-self:start;justify-self:start;font-size:12px;line-height:1.3}.event-heading{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.event-context{font-size:13px;color:var(--muted)}.event-time{font-variant-numeric:tabular-nums;white-space:normal}.ack-column{display:grid;gap:4px;justify-items:start;font-size:12px}.ack-column button{padding:5px 10px;min-height:32px}.ack-error{color:#ffb1b1}.ack-column [role=status]{overflow-wrap:anywhere}.drill-tag{color:#f1d387;font-weight:800;border:1px dashed currentColor;border-radius:4px;padding:1px 5px;font-size:12px}.bottleneck-card{padding:8px 0;border-top:1px solid var(--line)}.bottleneck-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:14px}.bottleneck-card p{margin:3px 0;font-size:13px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;color:var(--muted);max-width:100%}button:disabled{opacity:.65;cursor:wait}.feed-footer{display:flex;gap:12px;align-items:center;flex-wrap:wrap}@media(max-width:650px){.feed li.alert-card{grid-template-columns:minmax(0,1fr) minmax(110px,145px);gap:8px}.event-time{grid-column:1/-1}.alert-filters label{flex:1;min-width:120px}.alert-filters select{width:100%}}
+</style></head><body>
+<header><h1>Crowd Risk · Staff Monitor</h1><select id="camera-select" aria-label="Camera"><option value="">All cameras</option></select><time id="clock"></time><button id="sound" type="button">Enable sound</button><label for="staff-name">Staff name<input id="staff-name" autocomplete="name" placeholder="Name for acknowledgement"></label><label for="staff-token">Staff token (if required)<input id="staff-token" type="password" autocomplete="off" placeholder="Optional access token"></label><button id="present" type="button" aria-pressed="false">Presentation mode · P</button></header>
+<div class="banner" role="note">Research prototype. Staff only. Not a certified safety system.</div>
+<main><div id="cameras" aria-live="polite"><p class="empty">NO DATA — start a monitor with dashboard output enabled.</p></div><aside><h2>Alert history</h2><p class="muted">Each alert records conditions at its event time and may differ from the current zone level. Acknowledged does not mean resolved.</p>
+<div class="alert-filters">
+<label>Camera<select id="filter-camera"><option value="">All cameras</option></select></label>
+<label>Level<select id="filter-level"><option value="">All levels / events</option><option value="1">L1</option><option value="2">L2</option><option value="3">L3</option><option value="4">L4</option><option value="0">Event (no density level)</option></select></label>
+<label>Event type<select id="filter-kind"><option value="">All types</option></select></label>
+<label>Drill<select id="filter-drill"><option value="">All events</option><option value="yes">DRILL only</option><option value="no">Non-drill only</option></select></label>
+<label>Acknowledgement<select id="filter-ack"><option value="">All statuses</option><option value="yes">Acknowledged</option><option value="no">Not acknowledged</option></select></label>
+</div><p id="feed-status" class="muted" role="status"></p><ul id="feed" class="feed" aria-label="Recent alerts, newest first"></ul><div class="feed-footer"><button id="load-more" type="button">Load more</button><small>Newest first · Filters apply to loaded recent records · Maximum 500 records</small></div></aside></main>
+<script>
+'use strict';
+const $=s=>document.querySelector(s), tiles=new Map();
+// SOUND_GATE_BEGIN
+function createAlertSoundGate(){
+ let primed=false;const seen=new Set();
+ return function(alerts,now=Date.now()){
+  const fresh=[];
+  for(const a of alerts){
+   if(!a.id||seen.has(a.id))continue;
+   seen.add(a.id);
+   const age=now-Date.parse(a.time);
+   if(primed&&a.channels?.includes('sound')&&!a.acknowledgement&&age>=0&&age<10000)fresh.push(a);
+  }
+  primed=true;return fresh;
+ };
+}
+// SOUND_GATE_END
+let audio=null; const soundAlerts=createAlertSoundGate();
+$('#sound').onclick=async()=>{audio=audio||new (window.AudioContext||window.webkitAudioContext)();await audio.resume();$('#sound').textContent='Sound enabled';};
+function beep(drill=false){if(!audio)return;$('#sound').textContent=drill?'Sound enabled · DRILL double tone':'Sound enabled';for(let i=0;i<(drill?2:1);i++){const o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);g.gain.value=.08;o.frequency.value=drill?880:660;o.start(audio.currentTime+i*.3);o.stop(audio.currentTime+i*.3+.2)}}
+async function acknowledge(a){
+ if(!a.id||pendingAcks.has(a.id)||a.acknowledgement||confirmedAcks.has(a.id))return;
+ const staff=$('#staff-name').value.trim();
+ if(!staff||staff.length>80||! /^[\p{L}\p{N}_ .'-]+$/u.test(staff)){
+  ackErrors.set(a.id,'Enter a staff name (1–80 letters, numbers, spaces, period, apostrophe or hyphen).');renderAlerts();return;
+ }
+ pendingAcks.add(a.id);ackErrors.delete(a.id);renderAlerts();
+ const headers={'Content-Type':'application/json'},token=$('#staff-token').value;
+ if(token)headers.Authorization='Bearer '+token;
+ try{
+  const r=await fetch('/api/ack',{method:'POST',headers,body:JSON.stringify({alert_id:a.id,staff})});
+  if(!r.ok){const messages={400:'Name or event ID was rejected. Check the staff name.',403:'Access denied. Check the staff token and use the local dashboard.',404:'Event not found in this server’s audit log.',503:'Acknowledgement could not be stored. Try again.'};throw Error(messages[r.status]||'Acknowledgement failed (HTTP '+r.status+'). Try again.')}
+  const ack=await r.json();confirmedAcks.set(a.id,ack);
+ }catch(e){ackErrors.set(a.id,e.message||'Network error. Try again.')}finally{pendingAcks.delete(a.id);renderAlerts()}
+}
+
+function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
+async function get(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('Data unavailable');return r.json()}
+const finite=n=>typeof n==='number'&&Number.isFinite(n);
+const num=(n,d=1)=>finite(n)?n.toFixed(d):'Unavailable';
+// L1–L4 are configured density bands. Event level 0 means no zone band (source/bottleneck), not a fifth density level.
+const level=n=>[1,2,3,4].includes(n)?'L'+n:'Unavailable';
+function fresh(s,now=Date.now()){const age=now-Date.parse(s?.timestamp);return s?.source_status==='live'&&finite(age)&&age>=-1000&&age<=5000}
+$('#camera-select').onchange=()=>{for(const [id,t] of tiles)t.root.hidden=!!$('#camera-select').value&&id!==$('#camera-select').value};
+function presentation(){const on=document.body.classList.toggle('presentation');$('#present').setAttribute('aria-pressed',String(on))}
+$('#present').onclick=presentation;document.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='p'&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&e.target.tagName!=='INPUT'){e.preventDefault();presentation()}});
+function clock(){$('#clock').textContent=new Date().toLocaleString()}clock();setInterval(clock,1000);
+function chart(canvas,history,zone){const ctx=canvas.getContext('2d'),w=canvas.width=600,h=canvas.height=230,p=38;ctx.clearRect(0,0,w,h);const points=history.map(s=>({x:s.video_s??Date.parse(s.timestamp)/1000,y:s.zones.find(z=>z.name===zone.name)?.density})).filter(p=>finite(p.x)&&finite(p.y));const max=Math.max(1,...zone.thresholds,...points.map(p=>p.y))*1.2;const y=v=>h-p-v/max*(h-2*p);ctx.font='18px system-ui';ctx.fillStyle='#b2c1cf';ctx.fillText('people/m²',p,20);zone.thresholds.forEach((v,i)=>{ctx.strokeStyle=['#f2d771','#ffad6b','#ff8e99'][i];ctx.setLineDash([7,5]);ctx.beginPath();ctx.moveTo(p,y(v));ctx.lineTo(w-10,y(v));ctx.stroke();ctx.fillStyle=ctx.strokeStyle;ctx.fillText('L'+(i+2)+' '+v,2,y(v)-4)});ctx.setLineDash([]);if(points.length){const a=points[0].x,b=points.at(-1).x;ctx.strokeStyle='#8fd6f5';ctx.lineWidth=3;ctx.beginPath();points.forEach((v,i)=>{const x=p+(v.x-a)/Math.max(1,b-a)*(w-p-12);i?ctx.lineTo(x,y(v.y)):ctx.moveTo(x,y(v.y))});ctx.stroke();ctx.fillStyle='#b2c1cf';ctx.fillText('Last '+Math.round(b-a)+' seconds',p,h-5)}else{ctx.fillStyle='#b2c1cf';ctx.fillText('Waiting for history',p,h/2)}}
+function blank(tile,label){tile.badge.textContent=label;tile.badge.className='badge no-data';tile.veil.hidden=false;tile.veil.style.display='grid';tile.veil.textContent='NO DATA · Unavailable';tile.details.replaceChildren(el('p','no-data','Unavailable — current readings, forecasts and ETA are masked together.'));tile.timing.replaceChildren()}
+function render(tile,s,history){
+ tile.status=s;
+ if(!fresh(s)){blank(tile,'NO DATA · Unavailable');return}
+ tile.badge.textContent=(s.source_type||'Source unavailable')+' · Receiving data';
+ const missingSample=(s.zones||[]).some(z=>!finite(z.density)||!finite(Date.parse(z.sample_timestamp))||Date.now()-Date.parse(z.sample_timestamp)>5000);
+ tile.veil.style.display=missingSample?'grid':'none';tile.veil.textContent='Analysis unavailable';tile.details.replaceChildren();
+ tile.details.append(el('p','muted','Estimator: '+(s.estimator||'Unavailable')+' · Updated '+new Date(s.timestamp).toLocaleTimeString()));
+ const zones=el('div','zones');
+ for(const original of s.zones){
+  const sampleAge=Date.now()-Date.parse(original.sample_timestamp);
+  const z=finite(sampleAge)&&sampleAge>=-1000&&sampleAge<=5000?original:{...original,density:null,people:null,level:null,density_level:null,persistent_level:null,forecast_30:null,forecast_60:null,forecast_120:null,forecast_levels:{},eta_to_L4:null,eta_state:'unavailable',trigger:'Unavailable — missing or stale sample'};
+  const card=el('section','zone'),head=el('h3',null,z.name);
+  head.append(el('span','badge L'+z.level,'Effective '+level(z.level)));
+  card.append(head,el('p','zone-meta','Category: '+(z.category||'Unavailable')));
+  let eta='Unavailable';
+  if(finite(z.eta_to_L4))eta=z.eta_to_L4===0?'At L4 density threshold':z.eta_to_L4+' s';
+  else if(z.eta_state==='not_rising')eta='Not rising';
+  else if(z.eta_state==='beyond_horizon')eta='No crossing within 120 s';
+  const metrics=el('div','summary-metrics'),density=el('div'),etaBlock=el('div');
+  density.append(el('small',null,'Current density · estimate'),el('div','metric',num(z.density)+' persons/m²'));
+  etaBlock.append(el('small',null,'Estimated time to L4 density'),el('div','countdown',eta));
+  if(z.eta_state==='not_rising'&&eta==='Not rising')etaBlock.append(el('p','eta-note','Forecast does not currently reach L4.'));
+  metrics.append(density,etaBlock);card.append(metrics);
+  const forecasts=el('div','forecast-grid');
+  for(const h of [30,60,120]){const f=el('div','forecast');f.append(el('small',null,'+'+h+' s'),el('strong',null,num(z['forecast_'+h])),el('small','forecast-level','persons/m² · '+level(z.forecast_levels?.[String(h)])));forecasts.append(f)}
+  card.append(forecasts);
+  const detail=el('details'),summary=el('summary',null,'Levels, estimates & history');
+  tile.expanded=tile.expanded||new Set();detail.open=tile.expanded.has(z.name);
+  detail.ontoggle=()=>{if(detail.open)tile.expanded.add(z.name);else tile.expanded.delete(z.name)};
+  detail.append(summary,el('p',null,'People estimate: '+num(z.people)+' · Current-density band: '+level(z.density_level)+' · Persistent level: '+level(z.persistent_level)),el('p','muted','Reason: '+(z.trigger||'Unavailable')),el('p','legend','Damped trend estimates, not trained predictions. Sample: '+num(z.sample_video_s)+' video s.'));
+  const c=el('canvas','chart');c.setAttribute('aria-label',z.name+' historical density and category thresholds');c.setAttribute('role','img');detail.append(c);card.append(detail);zones.append(card);
+  if(Array.isArray(z.thresholds)&&z.thresholds.length===3){chart(c,history,z);const [a,b,d]=z.thresholds;detail.append(el('p','legend',`Density bands (persons/m²): L1 < ${a}; L2 ≥ ${a} and < ${b}; L3 ≥ ${b} and < ${d}; L4 ≥ ${d}. Equality enters the higher band. L1 is not a safety certification.`))}
+  detail.append(el('p','legend','Active overrides: '+(z.active_overrides?.join(', ')||'None')+' · Effective level includes persistence, hysteresis, forecasts and overrides.'));
+
+ }
+ tile.details.append(zones);renderBottlenecks(tile,s);
+
+}
+function createTile(camera){const root=el('article','camera'),head=el('h2',null,camera.name),badge=el('span','badge','WAITING');head.append(badge);const grid=el('div','camera-grid'),picture=el('div','picture'),image=el('img');image.alt='Annotated staff camera view: '+camera.name;const veil=el('div','veil','NO DATA'),details=el('div'),timing=el('div','timing');picture.append(image,veil);grid.append(picture,details);root.append(head,grid,timing);$('#cameras').append(root);return {root,badge,image,veil,details,timing,status:null}}
+const conditionLabels={
+ 'width_ratio>1.5':'Passage narrows',
+ 'speed<0.5':'Estimated speed below 0.5 m/s',
+ 'counterflow':'Opposing movement detected',
+ 'flow>85%cap':'Estimated flow above 85% of configured capacity',
+ 'queue_growing_flow_flat':'Queue growing without increased outflow'
+};
+const textValue=v=>typeof v==='string'&&v.trim()?v:'Unavailable';
+const timeText=t=>Number.isFinite(Date.parse(t))?new Date(t).toLocaleString():'Time unavailable';
+function triggerText(t){if(t==='current')return 'Current-density trigger';const match=/^forecast \+(\d+)s$/.exec(t);if(match)return 'Forecast threshold crossing: +'+match[1]+' s.';const codes=typeof t==='string'?t.split(','):[];if(codes.length&&codes.every(c=>conditionLabels[c]))return codes.map(c=>conditionLabels[c]).join(' · ');return textValue(t)}
+function technicalDetail(tile,key,title){const d=el('details');tile.diagnosticExpanded=tile.diagnosticExpanded||new Set();d.open=tile.diagnosticExpanded.has(key);d.ontoggle=()=>{if(d.open)tile.diagnosticExpanded.add(key);else tile.diagnosticExpanded.delete(key)};d.append(el('summary',null,title));return d}
+function renderBottlenecks(tile,s){
+ tile.timing.replaceChildren(el('strong',null,'Bottleneck diagnostics'));
+ for(const b of s.links||[]){
+  const item=el('section','bottleneck-card'),head=el('div','bottleneck-head'),codes=Array.isArray(b.conditions)?b.conditions:[];
+  head.append(el('strong',null,textValue(b.link)),el('span','badge',b.flagged===true?'⚠ Flagged':b.flagged===false?'Not flagged':'Status unavailable'));
+  item.append(head,el('p',null,codes.length?codes.map(c=>conditionLabels[c]||'Condition: '+c).join(' · '):'No flagged conditions supplied'),el('small',null,'Snapshot: '+timeText(s.timestamp)));
+  const detail=technicalDetail(tile,'link:'+b.link,'Technical details');
+  detail.append(el('pre',null,JSON.stringify(b,null,2)),el('p','muted','Available zone measurements at analysis time:'));
+  const endpoints=typeof b.link==='string'?b.link.split('->'):[];
+  for(const z of s.zones||[])if(endpoints.includes(z.name))detail.append(el('p',null,z.name+': density '+num(z.density)+' persons/m²; estimated speed '+num(z.speed,2)+' m/s; sample '+timeText(z.sample_timestamp)));
+  detail.append(el('p','muted','Passage widths, width ratio, flow, capacity and counterflow ratio are not supplied by this snapshot API. No measurements are inferred from condition codes.'));
+  item.append(detail);tile.timing.append(item);
+ }
+ if(!(s.links||[]).length)tile.timing.append(el('p','muted','No connection diagnostics supplied.'));
+ tile.timing.append(el('p','muted','Provisional diagnostics; require calibration and validation.'));
+ const stages=technicalDetail(tile,'stages','Processing-stage diagnostics');
+ stages.append(el('p','muted','Recorded processing stages only — not end-to-end latency.'),el('pre',null,Object.entries(s.stages||{}).map(([k,v])=>k+': '+num(v,3)+' s').join('\n')||'Measurements unavailable'));
+ tile.timing.append(stages);
+}
+let alertLimit=25,alertRows=[],lastAlertSignature='';
+const pendingAcks=new Set(),ackErrors=new Map(),confirmedAcks=new Map();
+function filteredAlerts(rows,filters={}){
+ return rows.filter(a=>a&&typeof a==='object').map(a=>({...a,acknowledgement:confirmedAcks.get(a.id)||a.acknowledgement})).filter(a=>
+  (!filters.camera||a.camera===filters.camera)&&(!filters.level||String(a.level)===filters.level)&&(!filters.kind||a.kind===filters.kind)&&
+  (!filters.drill||(filters.drill==='yes'?a.drill===true:a.drill!==true))&&(!filters.ack||(filters.ack==='yes'?!!a.acknowledgement:!a.acknowledgement))
+ ).sort((a,b)=>(Date.parse(b.time)||0)-(Date.parse(a.time)||0));
+}
+function updateAlertOptions(){for(const [id,key]of [['filter-camera','camera'],['filter-kind','kind']]){
+ const select=$('#'+id),previous=select.value;select.replaceChildren();const all=el('option',null,key==='camera'?'All cameras':'All types');all.value='';select.append(all);
+ const values=[...new Set(alertRows.map(a=>a[key]).filter(v=>typeof v==='string'&&v))];if(previous&&!values.includes(previous))values.push(previous);
+ for(const value of values.sort()){const option=el('option',null,value);option.value=value;select.append(option)}select.value=previous;
+}}
+function renderAlerts(){
+ const filters={};for(const key of ['camera','level','kind','drill','ack'])filters[key]=$('#filter-'+key).value;
+ const rows=filteredAlerts(alertRows,filters).slice(0,alertLimit);$('#feed').replaceChildren();
+ for(const a of rows){
+  const item=el('li','alert-card'+(a.drill?' drill':'')),time=el('time','event-time',timeText(a.time)),body=el('div'),heading=el('div','event-heading');
+  if(a.drill)heading.append(el('span','drill-tag','DRILL'));
+  heading.append(el('span','badge L'+a.level,a.level===0?'Event':level(a.level)),el('strong',null,textValue(a.kind).replaceAll('_',' ')));
+  body.append(heading,el('div','event-context','Camera: '+textValue(a.camera)+' · Zone / connection: '+textValue(a.zone)),el('div',null,triggerText(a.trigger)));
+  const action=el('div','ack-column'),feedback=el('div',ackErrors.has(a.id)?'ack-error':'muted');feedback.setAttribute('role','status');
+  if(a.acknowledgement){action.append(el('strong',null,'Acknowledged'),el('span',null,'By '+textValue(a.acknowledgement.staff)),el('time',null,timeText(a.acknowledgement.timestamp)))}
+  else{
+   action.append(el('span',null,'Not acknowledged'));
+   const button=el('button',null,pendingAcks.has(a.id)?'Acknowledging…':'Acknowledge');button.type='button';button.disabled=!a.id||pendingAcks.has(a.id);button.onclick=()=>acknowledge(a);action.append(button);
+   if(!a.id)feedback.textContent='Event has no ID; acknowledgement unavailable.';
+  }
+  if(ackErrors.has(a.id))feedback.textContent=ackErrors.get(a.id);action.append(feedback);item.append(time,body,action);$('#feed').append(item);
+ }
+ if(!rows.length)$('#feed').append(el('li','muted','No matching alerts in loaded recent records.'));
+ $('#feed-status').textContent='Newest first · '+rows.length+' matching / '+alertRows.length+' loaded · Recent window: '+alertLimit+' records';
+ $('#load-more').disabled=alertLimit>=500||alertRows.length<alertLimit;
+ $('#load-more').textContent=alertLimit>=500?'500-record limit reached':'Load more';
+}
+for(const key of ['camera','level','kind','drill','ack'])$('#filter-'+key).onchange=renderAlerts;
+$('#load-more').onclick=()=>{alertLimit=Math.min(500,alertLimit+25);lastAlertSignature='';poll()};
+
+let polling=false;
+async function poll(){
+ if(polling)return;polling=true;
+ try{
+  const cameras=await get('/api/cameras');if(cameras.length&&!tiles.size)$('#cameras').replaceChildren();
+  const ids=new Set(cameras.map(c=>c.id));for(const [id,t]of tiles)if(!ids.has(id)){t.root.remove();tiles.delete(id)}
+  for(const camera of cameras){let tile=tiles.get(camera.id);if(!tile){tile=createTile(camera);tiles.set(camera.id,tile);const option=el('option',null,camera.name);option.value=camera.id;$('#camera-select').append(option)}
+   try{const [s,h]=await Promise.all([get('/api/status/'+encodeURIComponent(camera.id)),get('/api/history/'+encodeURIComponent(camera.id))]);render(tile,s,h);tile.root.hidden=!!$('#camera-select').value&&camera.id!==$('#camera-select').value;if(fresh(s)&&s.frame_data)tile.image.src=s.frame_data}catch{blank(tile,'NO DATA')}
+  }
+ }catch{for(const t of tiles.values())blank(t,'NO DATA')}
+ try{
+  const rows=await get('/api/alerts?limit='+alertLimit);
+  for(const event of soundAlerts(rows))beep(event.drill);
+  const signature=JSON.stringify(rows);
+  if(signature!==lastAlertSignature){lastAlertSignature=signature;alertRows=rows;updateAlertOptions();renderAlerts()}
+ }catch{$('#feed-status').textContent='Alert history unavailable — previously loaded records may be outdated.'}
+ finally{polling=false}
+}
+poll();setInterval(poll,500);setInterval(()=>{for(const t of tiles.values())if(!fresh(t.status))blank(t,'NO DATA')},500);
+</script></body></html>

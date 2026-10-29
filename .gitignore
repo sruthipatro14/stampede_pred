@@ -1,0 +1,37 @@
+# Python environment and cache
+.venv/
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+config.json
+config.json.*
+config.*.json
+
+# Logs and generated alert records
+*.log
+*.jsonl
+
+# Generated recordings and extracted frames
+*.mp4
+frame.png
+scene_frame_*.png
+
+# Local test and verification artifacts
+backups/
+dashboard_data/
+dashboard_workflow_test/
+evaluation_code_test/
+labeling_demo_test/
+phase1_verification/
+recordings_demo_test/
+yolo_check/
+
+# Model weights (can be large)
+yolov8n.pt
